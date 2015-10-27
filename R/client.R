@@ -9,7 +9,7 @@ sessionClient <- function(name = get_client_name(), server = "localhost", port =
   e$server <- server
   e$port <- port
   e$assign <- function(symbol, value, timeout = 10L) {
-    con <- socketConnection(server = server, port = port, blocking = TRUE,
+    con <- socketConnection(host = server, port = port, blocking = TRUE,
       server = FALSE, open = "r+", timeout = timeout)
     on.exit(close(con))
     request <- list(client = name, time = Sys.time(), command = "assign",
@@ -21,7 +21,7 @@ sessionClient <- function(name = get_client_name(), server = "localhost", port =
   }
   e$send <- function(expr, timeout = 10L) {
     expr <- substitute(expr)
-    con <- socketConnection(server = server, port = port, blocking = TRUE,
+    con <- socketConnection(host = server, port = port, blocking = TRUE,
       server = FALSE, open = "r+", timeout = timeout)
     on.exit(close(con))
     request <- list(client = name, time = Sys.time(), command = "send", args = list(expr = expr))
@@ -32,7 +32,7 @@ sessionClient <- function(name = get_client_name(), server = "localhost", port =
   }
   e$eval <- function(expr, timeout = 10L) {
     expr <- substitute(expr)
-    con <- socketConnection(server = server, port = port, blocking = TRUE,
+    con <- socketConnection(host = server, port = port, blocking = TRUE,
       server = FALSE, open = "r+", timeout = timeout)
     on.exit(close(con))
     request <- list(client = name, time = Sys.time(), command = "eval", args = list(expr = expr))
@@ -49,7 +49,7 @@ sessionClient <- function(name = get_client_name(), server = "localhost", port =
     }
   }
   e$kill <- function(..., timeout = 10L) {
-    con <- socketConnection(server = server, port = port, blocking = TRUE,
+    con <- socketConnection(host = server, port = port, blocking = TRUE,
       server = FALSE, open = "r+", timeout = timeout)
     on.exit(close(con))
     request <- list(client = name, time = Sys.time(), command = "kill", args = list(...))
