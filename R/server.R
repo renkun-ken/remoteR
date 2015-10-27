@@ -2,9 +2,14 @@ server_eval <- function(expr) {
   withVisible(eval(expr, globalenv()))
 }
 
+server_send <- function(expr) {
+  eval(expr, globalenv())
+  NULL
+}
+
 server_assign <- function(symbol, value) {
   assign(symbol, value, globalenv())
-  list(visible = FALSE)
+  NULL
 }
 
 server_kill <- function(...) {
@@ -25,11 +30,9 @@ sessionServer <- function(host = "localhost", port = 6001) {
         request <- unserialize(con)
         cat(sprintf("[%s] %s > %s\n",
           format(request$time, "%Y-%m-%d %H:%M:%S"), request$client, request$command))
-        res <- do.call(sprintf("server_%s", request$command), request$args, quote = TRUE, envir = globalenv())
-        obj <- if (inherits(res, "try-error")) res
-        else if (res$visible) res
-        else list(visible = FALSE)
-        serialize(obj, con)
+        res <- try(do.call(sprintf("server_%s", request$command),
+          request$args, quote = TRUE, envir = globalenv()), silent = TRUE)
+        serialize(res, con)
       }, error = function(e) message(e, "\n"),
         warning = function(w) message(w, "\n"),
         finally = close(con))
