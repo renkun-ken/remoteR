@@ -1,0 +1,13 @@
+Package: remoteR
+Title: Connect to Remote R Sessions
+Version: 0.0.0.9000
+Authors@R: person("Kun", "Ren", email = "ken@renkun.me", role = c("aut", "cre"))
+Description: Provides functions to host a R session server and to connect to
+    remote R sessions with basic communication facilities.
+Depends: R (>= 3.0.0)
+License: MIT + file LICENSE
+URL: https://github.com/renkun-ken/remoteR
+BugReports: https://github.com/renkun-ken/remoteR/issues
+Roxygen: list(wrap = FALSE)
+ByteCompile: TRUE
+LazyData: true
